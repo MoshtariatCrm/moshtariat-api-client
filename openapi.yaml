@@ -1,0 +1,71 @@
+openapi: 3.0.3
+info:
+  title: Moshtariat CRM Lead Ingress & Sales API
+  description: Official OpenAPI 3.0 specification for Moshtariat CRM (سی ار ام ابری مشتریات).
+  version: 1.0.0
+  termsOfService: https://moshtariat.ir/legal-terms
+  contact:
+    name: Moshtariat Support Team
+    url: https://moshtariat.ir/contact
+    email: support@moshtariat.ir
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: https://moshtariat.ir
+    description: Production Cloud Gateway
+paths:
+  /?controller=api&action=lead_ingress:
+    post:
+      summary: Ingress Lead into Kanban Pipeline
+      description: Captures leads from forms, websites, webhooks, or messaging apps directly into the designated pipeline column.
+      operationId: createLead
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeadIngressRequest'
+      responses:
+        '200':
+          description: Lead successfully accepted and queued into CRM pipeline.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeadIngressResponse'
+components:
+  schemas:
+    LeadIngressRequest:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          example: استعلام قیمت CRM ابری - شرکت توسعه تجارت
+        contact_name:
+          type: string
+          example: علیرضا محمدی
+        phone:
+          type: string
+          example: "09123456789"
+        source:
+          type: string
+          example: وب‌سایت / فرم مشاوره
+        tags:
+          type: array
+          items:
+            type: string
+          example: ["B2B", "تهران", "پایپ‌لاین_فروش"]
+    LeadIngressResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        lead_id:
+          type: integer
+          example: 1042
+        status:
+          type: string
+          example: created
